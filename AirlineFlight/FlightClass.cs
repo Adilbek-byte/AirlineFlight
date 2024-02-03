@@ -1,18 +1,22 @@
-﻿namespace AirlineFlight;
+﻿using System.Runtime.ExceptionServices;
 
+namespace AirlineFlight;
 
-public enum FlightClass
-{
-    FirstClass = 1,
-    BusinessClass = 2, 
-    PremiumClass = 3
-}
-/*public class FlightClass
+public class FlightClass
 {
     public static Random random = new Random();
-    static readonly int FirstClass = 1, PremiumClass = 2, BusinessClass = 3;
-    static int[] flightSort = { FirstClass, PremiumClass, BusinessClass };
-    
+    public enum AirClass
+    {
+       FirstClass = 1, 
+       BusinessClass = 2,
+       PremiumClass = 3
+    }
+            
+    public static string SetRandomClass()
+    {
+       int rndIndex = random.Next(Enum.GetValues(typeof(AirClass)).Length);
+       AirClass rndFlightClass = (AirClass)Enum.GetValues(typeof(AirClass)).GetValue(rndIndex)!;
+        return rndFlightClass.ToString();   
+    }
 
-   
-}*/
+}
