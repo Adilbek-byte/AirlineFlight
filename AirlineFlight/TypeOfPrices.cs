@@ -18,7 +18,7 @@ public class TypeOfPrices
             case Category.Adult:
                 return random.Next(299, 1499);
             case Category.Children:
-                return random.Next(50, 300);
+                return random.Next(49, 299);
             default:
                 throw new ArgumentOutOfRangeException(nameof(category), "Invalid category");
         }
