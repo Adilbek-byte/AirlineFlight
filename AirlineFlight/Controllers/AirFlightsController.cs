@@ -14,6 +14,12 @@ public class AirFlightsController: ControllerBase
         return planes;
     }
 
+    [HttpPost("report")]
+    public Flight Post(Flight flight)
+    {
+        return flight;
+    }
+
     [HttpGet("quantity", Name = "GetCurtainNumberOfFlights")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
