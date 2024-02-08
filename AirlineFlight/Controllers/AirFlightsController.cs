@@ -17,7 +17,7 @@ public class AirFlightsController: ControllerBase
         return planes;
     }
 
-    [HttpGet("GetNumber/{numberOfFlights}", Name = "GetCurtainNumberOfFlights")]
+    [HttpGet("quantity", Name = "GetCurtainNumberOfFlights")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
     public async Task<ActionResult<List<Flight>>> GetNumberOfFlights(int numberOfFlights)
