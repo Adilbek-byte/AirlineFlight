@@ -1,21 +1,26 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace AirlineFlight;
 
 public class FlightSchedule
 {
-    public static Random random = new Random(); 
-   /* private readonly DateTime _start;
-    private readonly DateTime _end;*/
+    public static Random random = new Random();
 
-    public DateTime Departure { get {
-            return RandomTime(30);
-        }  }
-         
-    public DateTime Return { get {
-            return Departure.AddDays(random.Next(10, 13));
-        } }
+    public FlightSchedule()
+    {
+        Departure = RandomTime(30);
+        Return = Departure.AddDays(random.Next(10, 13));
+    }
 
+    [JsonConverter(typeof(CustomDateTimeConverter))]
+    public DateTime Departure { get; set; }
+
+    [JsonConverter(typeof(CustomDateTimeConverter))]
+    public DateTime Return { get; set; }
+
+    
+    
     public static DateTime RandomTime(int daysRange)
     {
         DateTime today = DateTime.Today;
@@ -24,4 +29,6 @@ public class FlightSchedule
       
 
     }
+
+    
 }
