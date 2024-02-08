@@ -27,7 +27,7 @@ public class FlightSchedule
         DateTime MonthAhead = today.AddDays(random.Next(0, daysRange));
         return MonthAhead;
       
-
+        
     }
 
     

@@ -1,4 +1,6 @@
 ﻿
+using static AirlineFlightl.TypeOfPrices;
+
 namespace AirlineFlightl;
 
 public class TypeOfPrices
@@ -11,6 +13,10 @@ public class TypeOfPrices
         Children = 2
     }
 
+    
+    
+
+
     public static string PriceOfTickets(Category category)
     {
         Random random = new Random();
@@ -18,7 +24,7 @@ public class TypeOfPrices
         switch (category)
         {
             case Category.Adult:
-                return $"{random.Next(299, 1499)} $" ;
+                return $"{random.Next(299, 1499)} $";
             case Category.Children:
                 return $"{random.Next(50, 300)} $";
             default:
