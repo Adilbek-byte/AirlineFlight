@@ -27,7 +27,7 @@ public class InputHelper
 
             item.Passengers!.TotalPeople = item.Passengers.Adult + item.Passengers.Child;
             item.Passengers.TotalSum = (CalculateTotalFee(item.Passengers!.Adult, TypeOfPrices.Category.Adult) +
-            CalculateTotalFee(item.Passengers!.Child, TypeOfPrices.Category.Children)).ToString();
+            CalculateTotalFee(item.Passengers!.Child, TypeOfPrices.Category.Children)).ToString() + " $";
        
        
 
@@ -38,7 +38,15 @@ public class InputHelper
 
 
     }
+
+
+
+
     
+
+
+
+
 
 
 }
