@@ -1,10 +1,12 @@
 ﻿using AirlineFlightl;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AirlineFlight;
 
-public class AirFlights 
+public class AirFlights
 {
-    public static List<Flight> CreateFlights() {
+    public static List<Flight> CreateFlights()
+    {
         List<Flight> Flights = new List<Flight>()
     {
         new Flight(1, "Turkish Airlines", Flight.IsGearedUp(), Flight.RandomTime(), FlightClass.BusinessClass, TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Adult))
@@ -30,6 +32,109 @@ public class AirFlights
         };
         return Flights;
     }
-    
 
+
+    /*public static List<Flight> AirNameMethod(List<Flight> flights)
+    {
+        *//*var uniqueFlights = flights.Concat(avia)
+                                   .GroupBy(x => x.AviaName)
+                                   .Select(group => group.First())
+                                   .OrderBy(x => x.AviaName)
+                                   .ToList();*//*
+        try
+        {
+            var flightsByName = flights.Select(z => z.Direction);
+            if (flightsByName == null) throw new Exception("nothing is found");
+            return flightsByName;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"that is wrong: " ex.Message);
+        }
+        
+    }*/
+
+
+
+
+
+
+
+
+
+
+
+
+    //public static List<Flight> AirNameMethod(List<Flight> flights)
+    //{
+    //    var uniqueFlights = flights.GroupBy(x => x.AviaName)
+    //                           .Select(group => group.First())
+    //                           .ToList();                                        kerek
+
+    //    // Затем сортируем по свойству AviaName
+    //    var sortedFlights = uniqueFlights.OrderBy(x => x.AviaName == x.AviaName).ToList();
+
+    //    return sortedFlights;
+    //}
+
+
+
+    //public static List<Flight> AirNameMethod(List<Flight> flights, Flight avia)                  1)
+    //{
+    //    var uniqueFlights = flights.OrderBy(x => x.AviaName == avia.AviaName)                               
+    //                           .ToList();
+    //    uniqueFlights.Add(avia);
+    //    // Затем сортируем по свойству AviaName
+    //   // var sortedFlights = uniqueFlights.OrderBy(x => x.AviaName == x.AviaName).ToList();
+
+    //    return uniqueFlights;
+    //}
+
+
+
+
+
+
+
+    //public static List<Flight> AirNameMethod(List<Flight> flights)
+    //{
+    //    List<Flight> filteredFlights = new List<Flight>();
+
+    //    foreach (Flight item in filteredFlights)
+    //    {
+    //        var hasSameAviaName = filteredFlights.OrderBy(x => x.AviaName == item.AviaName);
+
+    //        //var res = hasSameAviaName;
+
+    //        var res = hasSameAviaName;
+    //        return res.ToList();
+    //    }
+
+    //    return filteredFlights;
+    //}
+
+
+
+
+    //public static List<Flight> AirNameMethod()
+    //{
+    //    List<Flight> airName1 = new List<Flight>();
+
+    //    foreach (Flight item in airName1)
+    //    {
+    //        airName1.Where(x => x.AviaName == item.AviaName);
+    //        airName1.Add(item);
+
+    //    }
+    //    return airName1;
+    //}
 }
+//Flight _airname = new Flight
+//List<AirFlights> flights1 = new List<AirFlights>();
+//public List<AirFlights> DirectionRes(this List<Flight> _flights, Flight _direction)
+//{
+
+//    var flights1 = _flights.OrderBy(x => x.Direction == _direction.Direction).ToList();
+//    flights1.Add(_direction);
+//    return 
+//}

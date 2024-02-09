@@ -5,6 +5,7 @@ namespace AirlineFlight;
 public class Flight
 {
     public static Random random = new Random(); 
+    public Flight() { }
     public Flight(int flightId, string? aviaName, bool isAvailable, DateTime date, FlightClass type, int priceOfTicket)
     {
         FlightId = flightId;
@@ -23,10 +24,7 @@ public class Flight
     public FlightClass Type { get; set; }
     public int PriceOfTicket { get; set; } 
 
-
-
     public LocationPath? Direction { get; set; }
-
 
 
 
