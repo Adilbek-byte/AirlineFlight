@@ -1,4 +1,6 @@
 ﻿using AirlineFlight.Helper;
+using AirlineFlight.Services;
+using AirlineFlight.Services.Interfaces;
 using AirlineFlightl;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics.Eventing.Reader;
@@ -10,11 +12,18 @@ namespace AirlineFlight.Controllers;
 [Route("flights")]
 public class AirFlightsController: ControllerBase
 {
+    private readonly IFlightService _flightservice;
+    public AirFlightsController(IFlightService flightService)
+    {
+        _flightservice = flightService;
+    }
+
     public static List<Flight> planes = AirFlights.CreateFlights();
     [HttpGet]
-    public List<Flight> GetFlights()
+    public async Task<IActionResult> GetFlights()
     {
-        return planes;
+        var res = await _flightservice.GetFligthsAsync();
+        return Ok(res);
     }
 
     [HttpGet("quantity", Name = "GetCurtainNumberOfFlights")]

@@ -7,7 +7,7 @@ public class Flight
     public static Random random = new Random();
 
     public Flight() {}
-    public Flight(int flightId, string aviaName, bool isAvailable,  string type, LocationPath direction, FlightSchedule date, TypeOfPrices priceOfTicket, Passenger passenger)
+    public Flight(int flightId, string aviaName, bool isAvailable,  string type, LocationPath direction, FlightSchedule date, TypeOfPrices priceOfTicket, Passenger passenger, WeatherForecast weather)
     {
         FlightId = flightId;
         AviaName = aviaName;
@@ -17,6 +17,7 @@ public class Flight
         Date = date;
         PriceOfTicket = priceOfTicket;
         Passengers = passenger;
+        Weather = weather;
     }
 
     public int FlightId { get; set; }
@@ -28,6 +29,7 @@ public class Flight
     public FlightSchedule? Date { get; set; }
     public TypeOfPrices? PriceOfTicket { get; set; } 
     public Passenger? Passengers { get; set; }
+    public WeatherForecast? Weather { get; set; }
 
 
     
