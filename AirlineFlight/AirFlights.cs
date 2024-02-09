@@ -20,15 +20,12 @@ public class AirFlights
 
         new Flight(6, "BritishAirline", Flight.IsGearedUp(),  FlightClass.SetRandomClass(), new LocationPath(){ FromWhere ="London", ToWhere = "New - Yourk"}, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast()),
 
-         new Flight(7, "FlyEthihad", Flight.IsGearedUp(),  FlightClass.SetRandomClass(), new LocationPath(){FromWhere = "Ethihad", ToWhere = "Brusell"}, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast())
+         new Flight(7, "FlyEthihad", Flight.IsGearedUp(),  FlightClass.SetRandomClass(), new LocationPath(){FromWhere = "Ethihad", ToWhere = "Brusell"}, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast()),
 
-        { Direction = new LocationPath { FromWhere = "Astana", ToWhere = "Bishkek" } },
-        new Flight(8, "Aeroflot", Flight.IsGearedUp(), Flight.RandomTime(), FlightClass.PremiumClass, TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Adult))
-        { Direction = new LocationPath { FromWhere = "Moscow", ToWhere = "Osh" } },
-         new Flight(9, "Air Kyrgyzstan", Flight.IsGearedUp(), Flight.RandomTime(), FlightClass.FirstClass, TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Children))
-        { Direction = new LocationPath { FromWhere = "Jalal-Abad", ToWhere = "Bishkek" } },
-        new Flight(10, "Air Kyrgyzstan", Flight.IsGearedUp(), Flight.RandomTime(), FlightClass.PremiumClass, TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Adult))
-        { Direction = new LocationPath { FromWhere = "Tamchy", ToWhere = "London" } }
+        new Flight(8, "FlyEthihad", Flight.IsGearedUp(), FlightClass.SetRandomClass(),  new LocationPath { FromWhere = "Astana", ToWhere = "Bishkek" }, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast()),
+        new Flight(9, "Aeroflot", Flight.IsGearedUp(), FlightClass.SetRandomClass(), new LocationPath { FromWhere = "Moscow", ToWhere = "Osh" }, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast()),
+        new Flight(10, "Air Kyrgyzstan", Flight.IsGearedUp(), FlightClass.SetRandomClass(), new LocationPath { FromWhere = "Jalal-Abad", ToWhere = "Bishkek" }, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast()),
+        new Flight(11, "Air Kyrgyzstan", Flight.IsGearedUp(), FlightClass.SetRandomClass(), new LocationPath { FromWhere = "Tamchy", ToWhere = "London" }, new FlightSchedule(), new TypeOfPrices(), new Passenger(), new WeatherForecast()),
         };
         return Flights;
     }
