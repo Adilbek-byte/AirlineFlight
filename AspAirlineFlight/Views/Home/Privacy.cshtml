@@ -1,0 +1,71 @@
+﻿@model List<AspAirlineFlight.Models.Flight>
+
+@* <select name="companyId">
+    @foreach (Flight fly in Model)
+    {
+        <option value="@fly.Date">@fly.AviaName</option>
+    }
+</select> *@
+
+<input type="text" id="fromInput" placeholder="Откуда" />
+<input type="text" id="toInput" placeholder="Куда" />
+<input type="button" value="Найти" onclick="redirectToFilterFlights()" />
+
+<script>
+    function redirectToFilterFlights() {
+        var fromValue = document.getElementById('fromInput').value;
+        var toValue = document.getElementById('toInput').value;
+
+        var url = '@Url.Action("GetFromTo", "Home")' + '?from=' + encodeURIComponent(fromValue) + '&to=' + encodeURIComponent(toValue);
+        window.location.href = url;
+    }
+</script>
+
+<table>
+    <tr>
+        <th>Название авиалинии</th>
+        <th>Дата возврата</th>
+        <th>Дата вылета</th>
+        <th>Откуда</th>
+        <th>Куда</th>
+        <th>Цена за взрослого</th>
+        <th>Цена за ребенка</th>
+        <th>Тип</th>
+        <th>ID</th>
+        <th></th>
+    </tr>
+    @foreach (var fly in Model)
+    {
+        <tr>
+            <td>@fly.AviaName</td>
+            <td>@fly.Date.Return</td>
+            <td>@fly.Date.Departure</td>
+            <td>@fly.Direction?.FromWhere</td>
+            <td>@fly.Direction?.ToWhere</td>
+            <td>@fly.PriceOfTicket?.Adults</td>
+            <td>@fly.PriceOfTicket?.Children</td>
+            <td>@fly.Type</td>
+            <td>@fly.FlightId</td>
+            <td>@fly.Passengers.</td>
+        </tr>
+    }
+</table>
+
+
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+
