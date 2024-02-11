@@ -9,14 +9,19 @@ using System.Linq.Expressions;
 using System.Net.WebSockets;
 
 namespace AirlineFlight.Controllers;
-
+// Атрибут [ApiController] указывает, что этот класс является контроллером API и включает в себя дополнительные функциональные возможности.
+// Атрибут [Route("flights")] определяет базовый маршрут для всех действий в контроллере, в данном случае - "flights".
 [ApiController]
 [Route("flights")]
-public class AirFlightsController: ControllerBase
+
+// Класс AirFlightsController представляет контроллер для обработки HTTP запросов, связанных с авиарейсами.
+// Наследуется от ControllerBase.
+public class AirFlightsController : ControllerBase
 {
     
     // list named planes stores all the data 
     public static List<Flight> planes = AirFlights.CreateFlights();
+
 
     /// <summary>
     /// GetFlights displays the data
@@ -28,11 +33,12 @@ public class AirFlightsController: ControllerBase
 
         return planes;
     }
-    
+
     /// <summary>
     /// GetDirection displays all the directions 
     /// </summary>
     /// <returns>list of directions </returns>
+    /// 
     [HttpGet("Direction", Name = "GetDirection")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -51,6 +57,7 @@ public class AirFlightsController: ControllerBase
             return BadRequest(ex.Message);
         }
     }
+    
 
     /// <summary>
     /// 
@@ -58,6 +65,15 @@ public class AirFlightsController: ControllerBase
     /// <param name="flight"></param>
     /// <param name="id"></param>
     /// <returns></returns>
+
+
+
+    // HTTP POST метод, обрабатывающий запрос на добавление нового авиарейса.
+    // Принимает объект Flight и уникальный идентификатор id в качестве параметров.
+    // Использует асинхронный метод PostFlightAsync() для выполнения операции.
+    // Возвращает HTTP статус 200 (OK) с обновленным списком авиарейсов в ответе.
+    // В случае уже существующего id возвращает HTTP статус 400 с сообщением об ошибке.
+    // В случае других ошибок возвращает HTTP статус 500 с сообщением об ошибке.
 
     [HttpPost(Name = "PostNewFlight")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
@@ -82,12 +98,19 @@ public class AirFlightsController: ControllerBase
         }
     }
 
+
     /// <summary>
     /// UpdateFlight refreshed data of chosen flight by id 
     /// </summary>
     /// <param name="flight"></param>
     /// <param name="id"></param>
     /// <returns>a updated list </returns>
+
+    // HTTP GET метод, обрабатывающий запрос на обновление информации об авиарейсе по идентификатору.
+    // Принимает параметры: объект Flight с обновленной информацией и уникальный идентификатор id.
+    // Возвращает HTTP статус 200 (OK) с обновленным списком авиарейсов в ответе.
+    // В случае отсутствия указанного id возвращает HTTP статус 400 и сообщение об ошибке.
+
     [HttpGet("update", Name = "UpdateFlight")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -112,11 +135,16 @@ public class AirFlightsController: ControllerBase
         }
 
     }
+
     /// <summary>
     /// GetNumberOfFlights delivers the number of flights you requested 
     /// </summary>
     /// <param name="numberOfFlights"></param>
     /// <returns>list </returns>
+
+    // HTTP GET метод, обрабатывающий запрос на получение определенного количества авиарейсов.
+    // Принимает параметр numberOfFlights, указывающий необходимое количество авиарейсов.
+
     [HttpGet("quantity", Name = "GetCurtainNumberOfFlights")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -144,6 +172,7 @@ public class AirFlightsController: ControllerBase
 
     }
 
+
     /// <summary>
     /// GetPassenger allows the user to add the quantity of Adults and children then
     /// it'll sum up and give you totalSum 
@@ -153,6 +182,10 @@ public class AirFlightsController: ControllerBase
     /// <param name="direction"></param>
     /// <returns> a list with updated data </returns>
 
+
+
+    // HTTP GET метод, обрабатывающий запрос на получение информации о доступных авиарейсах в зависимости от параметров пассажиров.
+    // Принимает параметры: numOfPassenger - количество пассажиров, typeOfPassenger - категория пассажиров, direction - направление.
 
     [HttpGet("{numOfPassenger}, {typeOfPassenger}, {direction}", Name = "GetInfoPassengers")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
@@ -175,6 +208,7 @@ public class AirFlightsController: ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
     /// <summary>
     /// GetPassenger takes passengers out and recalculates totalSum
     /// </summary>
@@ -182,6 +216,11 @@ public class AirFlightsController: ControllerBase
     /// <param name="typeOfPassenger"></param>
     /// <param name="direction"></param>
     /// <returns>a list with updated data </returns>
+
+
+    // Метод действия обрабатывает HTTP GET запрос по маршруту "ById/{id}" и возвращает авиарейс(ы) по указанному идентификатору.
+    // Принимает уникальный идентификатор id в качестве параметра.    
+    // Ищет авиарейс(ы) с указанным идентификатором в списке planes.
 
 
     [HttpGet("flight/{numOfPassenger}, {typeOfPassenger}, {direction}", Name = "GetOutPassengers")]
@@ -256,6 +295,7 @@ public class AirFlightsController: ControllerBase
 
 
     }
+
     /// <summary>
     /// SetUpNewFlight inspects if any flights with the requested id exist or not if not 
     /// it creates a new one with the id 
@@ -265,6 +305,13 @@ public class AirFlightsController: ControllerBase
     /// <returns></returns>
    
 
+
+    // Метод действия обрабатывает HTTP POST запрос по маршруту "{id}" и создает новый авиарейс с указанным идентификатором.
+    // Принимает объект Flight и уникальный идентификатор id в качестве параметров.
+    // После задержки в 1000 миллисекунд для имитации асинхронной операции выполняет следующие действия:
+    // Проверяет, существует ли уже авиарейс с указанным идентификатором в списке planes.
+    // Если авиарейс с таким id уже существует, выбрасывается исключение с сообщением "flight with the provided id already exists".
+
     [HttpPost("{id}", Name = "CreateFlightById")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -273,24 +320,29 @@ public class AirFlightsController: ControllerBase
         await Task.Delay(1000);
         try
         {
-            
+
             if (planes.Any(x => x.FlightId == id)) throw new Exception("flight with the provided id already exists");
             flight.FlightId = id;
             planes.Add(flight);
             return CreatedAtRoute("CreateFlightById", new { id }, flight);
         }
-        
+
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
     }
 
+
     /// <summary>
     /// deleteFlight removes a flight by id 
     /// </summary>
     /// <param name="flightId"></param>
     /// <returns>string message</returns>
+
+
+    // Метод действия обрабатывает HTTP POST запрос по маршруту "delete/{flightId}" для удаления авиарейса по его идентификатору.
+    // Принимает flightId в качестве параметра, представляющего уникальный идентификатор авиарейса.
 
     [HttpPost("delete/{flightId}")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
@@ -304,11 +356,12 @@ public class AirFlightsController: ControllerBase
             Console.WriteLine(al);
             return Ok($" flight with the {flightId} has been deleted");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
     }
+
 
     
 
@@ -318,5 +371,20 @@ public class AirFlightsController: ControllerBase
 
 
 
+
+
+    // Метод действия обрабатывает HTTP GET запрос по маршруту "hotflight".
+    // Возвращает список объектов HotFlight, представляющих информацию о горячих авиабилетах.
+    // В случае успешного выполнения запроса возвращается HTTP статус 200 и список HotFlight.
+    // В случае ошибки возвращается HTTP статус 400 с соответствующим сообщением об ошибке.
+    [HttpGet("hotflight")]
+    [ProducesResponseType(200, Type = typeof(List<HotFlight>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+
+    public ActionResult<List<HotFlight>> HotFlightMethod()
+    {
+        List<HotFlight> hotflight = HotFlight.CreateHotFlights();
+        return Ok(hotflight);
+    }
 
 }
