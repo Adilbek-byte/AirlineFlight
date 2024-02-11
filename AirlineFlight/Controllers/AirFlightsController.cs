@@ -10,7 +10,7 @@ namespace AirlineFlight.Controllers;
 
 [ApiController]
 [Route("flights")]
-public class AirFlightsController: ControllerBase
+public class AirFlightsController : ControllerBase
 {
     private readonly IFlightService _flightservice;
     public AirFlightsController(IFlightService flightService)
@@ -19,6 +19,7 @@ public class AirFlightsController: ControllerBase
     }
 
     public static List<Flight> planes = AirFlights.CreateFlights();
+
     [HttpGet]
     public async Task<IActionResult> GetFlights()
     {
@@ -170,13 +171,13 @@ public class AirFlightsController: ControllerBase
         await Task.Delay(1000);
         try
         {
-            
+
             if (planes.Any(x => x.FlightId == id)) throw new Exception("flight with the provided id already exists");
             flight.FlightId = id;
             planes.Add(flight);
             return CreatedAtRoute("CreateFlightById", new { id }, flight);
         }
-        
+
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
@@ -195,13 +196,21 @@ public class AirFlightsController: ControllerBase
             Console.WriteLine(al);
             return Ok($" flight with the {flightId} has been deleted");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
     }
+   
+    [HttpGet("hotflight")]
+    [ProducesResponseType(200, Type = typeof(List<HotFlight>))]
+    [ProducesResponseType(400, Type = typeof(string))]
 
-
+    public ActionResult<List<HotFlight>> HotFlightMethod()
+    {
+        List<HotFlight> hotflight = HotFlight.CreateHotFlights();
+        return Ok(hotflight);
+    }
 
 
 

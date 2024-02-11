@@ -6,15 +6,16 @@ namespace AirlineFlightl;
 public class TypeOfPrices
 {
     public string Adults { get; } = TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Adult);
-    public string Children {get; } = TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Children);
+    public string Children { get; } = TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Children);
+   
     public enum Category
     {
         Adult = 1,
         Children = 2
     }
 
-    
-    
+
+
 
 
     public static string PriceOfTickets(Category category)
@@ -31,4 +32,6 @@ public class TypeOfPrices
                 throw new ArgumentOutOfRangeException(nameof(category), "Invalid category");
         }
     }
+
+    
 }
