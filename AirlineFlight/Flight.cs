@@ -25,7 +25,7 @@ public class Flight
         Weather = weather;
         Bonus = bonus;
     }
-
+    
     public int FlightId { get; set; }
     public string? AviaName { get; set; }
     public bool IsAvailable { get; set; }
