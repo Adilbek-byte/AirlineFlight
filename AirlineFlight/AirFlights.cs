@@ -4,7 +4,7 @@ namespace AirlineFlight;
 
 public class AirFlights
 {
-    public static List<Flight> CreateFlights()
+    public static List<Flight> CreateFlights() //метод для списка вместо базы
     {
         List<Flight> Flights = new List<Flight>()
     {
