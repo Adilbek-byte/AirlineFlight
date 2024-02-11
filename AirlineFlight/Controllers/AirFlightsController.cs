@@ -34,6 +34,73 @@ public class AirFlightsController: ControllerBase
     /// <param name="numberOfFlights"></param>
     /// <returns>list </returns>
 
+    [HttpGet("Direction", Name = "GetDirection")]
+    [ProducesResponseType(200, Type = typeof(List<Flight>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+
+    public async Task<ActionResult<List<Flight>>> GetDirection()
+    {
+        await Task.Delay(1000);
+        try
+        {
+            var res = planes.Select(x => x.Direction).ToList();
+            if (res.Count == 0) throw new Exception("nothing is found");
+            return Ok(res);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("{PostNewFlight}", Name = "PostNewFlight")]
+    [ProducesResponseType(200, Type = typeof(List<Flight>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(500, Type = typeof(string))]
+
+    public async Task<IActionResult> PostFlight(Flight flight, int id)
+    {
+        await Task.Delay(1000);
+        try
+        {
+            var res = planes.FirstOrDefault(x => x.FlightId == id);
+            if (res != null) throw new Exception("the id you are looking for already exists");
+
+            flight.FlightId = id;
+            planes.Add(flight);
+            return CreatedAtRoute("PostNewFlight", new { id }, flight);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("update", Name = "UpdateFlight")]
+    [ProducesResponseType(200, Type = typeof(List<Flight>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public ActionResult<List<Flight>> UpdateFlight([FromQuery] Flight flight, int id)
+    {
+        try
+        {
+            var res = planes.FirstOrDefault(x => x.FlightId == id);
+            if (res == null) throw new Exception("the id has not been found");
+
+            res.Direction = flight.Direction;
+            res.Type = flight.Type;
+            res.AviaName = flight.AviaName;
+            res.PriceOfTicket = flight.PriceOfTicket;
+            res.FlightId = flight.FlightId;
+
+            return CreatedAtRoute("UpdateFlight", new { id }, flight);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
+    }
+
     [HttpGet("quantity", Name = "GetCurtainNumberOfFlights")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -47,7 +114,7 @@ public class AirFlightsController: ControllerBase
                 throw new Exception("The entered number should not be less than 0");
             else if (numberOfFlights > planes.Count) throw new Exception(" number out of scope");
 
-            for(int i = 0; i < numberOfFlights && i < planes.Count; i++)
+            for (int i = 0; i < numberOfFlights && i < planes.Count; i++)
             {
                 var flight = planes[i];
                 result.Add(flight);
@@ -78,15 +145,16 @@ public class AirFlightsController: ControllerBase
     {
         var res = planes.Where(t => t.Direction?.ToWhere == direction).ToList();
         try
-        {   if (numOfPassenger <= 0) throw new Exception("the number of passengers should not be less or eqqual to zero! ");
+        {
+            if (numOfPassenger <= 0) throw new Exception("the number of passengers should not be less or eqqual to zero! ");
             if (res.Count == 0) throw new Exception("such a location is not found");
             if (!Enum.TryParse<TypeOfPrices.Category>(typeOfPassenger, out var category)) throw new Exception("Invalid passenger category");
-            
+
             var output = InputHelper.getPassengerHelper(res, typeOfPassenger, numOfPassenger);
             Console.WriteLine(output);
             return Ok(res);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
@@ -155,22 +223,22 @@ public class AirFlightsController: ControllerBase
     /// <returns> a flight wiht the requested id </returns>
 
     [HttpGet("ById/{id}", Name = "GetById")]
-    public async Task<IActionResult>GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
         await Task.Delay(1000);
         try
         {
-          var res = planes.Where(t => t.FlightId == id).ToList();
+            var res = planes.Where(t => t.FlightId == id).ToList();
             if (res.Count == 0) throw new Exception("the id you are looking for is not found!");
             return Ok(res);
         }
-        
-        catch(Exception ex)
+
+        catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-        
-       
+
+
     }
     /// <summary>
     /// SetUpNewFlight inspects if any flights with the requested id exist or not if not 
