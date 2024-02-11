@@ -6,6 +6,7 @@ namespace AirlineFlight;
 
 public class FlightSchedule
 {
+    //random instance to obtain from
     public static Random random = new Random();
 
     public FlightSchedule()
