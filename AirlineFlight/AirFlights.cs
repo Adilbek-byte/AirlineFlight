@@ -4,11 +4,14 @@ namespace AirlineFlight;
 
 public class AirFlights
 {
+
     /// <summary>
     /// This method is applied to create a list of elements within to use it as a database
     /// </summary>
     /// <returns> a list with full of objects inside serves as a database</returns>
-    public static List<Flight> CreateFlights()
+  
+    public static List<Flight> CreateFlights() //метод для списка вместо базы
+
     {
         List<Flight> Flights = new List<Flight>()
     {
