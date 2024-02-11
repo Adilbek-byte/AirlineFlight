@@ -8,7 +8,7 @@ namespace AirlineFlight;
 
 public class Passenger
 {
-
+    //Passenger data 
     public int Adult { get; set; } = 0;
     public int Child { get; set; } = 0;
     public int TotalPeople { get; set; } = 0;

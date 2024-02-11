@@ -28,12 +28,11 @@ public class AirFlightsController: ControllerBase
 
         return planes;
     }
+    
     /// <summary>
-    /// GetNumberOfFlights delivers the number of flights you requested 
+    /// GetDirection displays all the directions 
     /// </summary>
-    /// <param name="numberOfFlights"></param>
-    /// <returns>list </returns>
-
+    /// <returns>list of directions </returns>
     [HttpGet("Direction", Name = "GetDirection")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -53,7 +52,14 @@ public class AirFlightsController: ControllerBase
         }
     }
 
-    [HttpPost("{PostNewFlight}", Name = "PostNewFlight")]
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="flight"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+
+    [HttpPost(Name = "PostNewFlight")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(500, Type = typeof(string))]
@@ -76,6 +82,12 @@ public class AirFlightsController: ControllerBase
         }
     }
 
+    /// <summary>
+    /// UpdateFlight refreshed data of chosen flight by id 
+    /// </summary>
+    /// <param name="flight"></param>
+    /// <param name="id"></param>
+    /// <returns>a updated list </returns>
     [HttpGet("update", Name = "UpdateFlight")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -100,7 +112,11 @@ public class AirFlightsController: ControllerBase
         }
 
     }
-
+    /// <summary>
+    /// GetNumberOfFlights delivers the number of flights you requested 
+    /// </summary>
+    /// <param name="numberOfFlights"></param>
+    /// <returns>list </returns>
     [HttpGet("quantity", Name = "GetCurtainNumberOfFlights")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]

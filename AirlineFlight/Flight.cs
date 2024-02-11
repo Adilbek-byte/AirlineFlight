@@ -5,6 +5,7 @@ namespace AirlineFlight;
 
 public class Flight
 {
+    // random instance to access random methods from 
     public static Random random = new Random();
 
     // Empty parameterless Flight constuctor serves to deals with the issues of deseresilization 
