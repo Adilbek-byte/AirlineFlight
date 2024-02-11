@@ -10,9 +10,9 @@ public class FlightService: IFlightService
     private readonly List<Flight> formFlight = AirFlights.CreateFlights();   
     
 
-    public async Task<List<Flight>> GetFligthsAsync()
+    public List<Flight> GetFligths()
     {
-        await Task.Delay(1500);
+        
         return formFlight;
     } 
      

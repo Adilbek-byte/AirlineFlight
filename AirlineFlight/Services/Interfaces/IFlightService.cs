@@ -2,5 +2,5 @@
 
 public interface IFlightService
 {
-    public Task<List<Flight>> GetFligthsAsync();
+    public List<Flight> GetFligths();
 }

@@ -1,4 +1,5 @@
-﻿using AirlineFlightl;
+﻿using AirlineFlight.Models;
+using AirlineFlightl;
 
 namespace AirlineFlight;
 
@@ -6,8 +7,11 @@ public class Flight
 {
     public static Random random = new Random();
 
+    // Empty parameterless Flight constuctor serves to deals with the issues of deseresilization 
     public Flight() {}
-    public Flight(int flightId, string aviaName, bool isAvailable,  string type, LocationPath direction, FlightSchedule date, TypeOfPrices priceOfTicket, Passenger passenger, WeatherForecast weather)
+    
+    // Flight constuctor with parameters initializes the properties down below
+    public Flight(int flightId, string aviaName, bool isAvailable,  string type, LocationPath direction, FlightSchedule date, TypeOfPrices priceOfTicket, Passenger passenger, WeatherForecast weather, Bonus bonus)
     {
         FlightId = flightId;
         AviaName = aviaName;
@@ -18,6 +22,7 @@ public class Flight
         PriceOfTicket = priceOfTicket;
         Passengers = passenger;
         Weather = weather;
+        Bonus = bonus;
     }
 
     public int FlightId { get; set; }
@@ -31,9 +36,12 @@ public class Flight
     public Passenger? Passengers { get; set; }
     public WeatherForecast? Weather { get; set; }
 
-
+    public Bonus? Bonus { get; set; }
     
-
+    /// <summary>
+    /// isGearedUp is used to determine if flight is available or not 
+    /// </summary>
+    /// <returns> boolean value </returns>
 
     public static bool IsGearedUp()
     {
