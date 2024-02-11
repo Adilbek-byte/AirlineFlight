@@ -23,7 +23,11 @@ public class FlightSchedule
     public DateTime Return { get; set; }
 
     
-    
+    /// <summary>
+    /// RandomTime method consoles out days within the range of 1 day till 30
+    /// </summary>
+    /// <param name="daysRange"></param>
+    /// <returns>random datetime </returns>
     public static DateTime RandomTime(int daysRange)
     {
         DateTime today = DateTime.Today;
