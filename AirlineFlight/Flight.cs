@@ -12,7 +12,7 @@ public class Flight
     public Flight() {}
     
     // Flight constuctor with parameters initializes the properties down below
-    public Flight(int flightId, string aviaName, bool isAvailable,  string type, LocationPath direction, FlightSchedule date, TypeOfPrices priceOfTicket, Passenger passenger, WeatherForecast weather, Bonus bonus)
+    public Flight(int flightId, string aviaName, bool isAvailable,  string type, LocationPathEntity direction, FlightScheduleEntity date, TypeOfPricesEntity priceOfTicket, PassengerEntity passenger, WeatherForecastEntity weather, BonusEntity bonus)
     {
         FlightId = flightId;
         AviaName = aviaName;
@@ -31,13 +31,13 @@ public class Flight
     public bool IsAvailable { get; set; }
    
     public string? Type { get; set; }
-    public LocationPath? Direction { get; set; }
-    public FlightSchedule? Date { get; set; }
-    public TypeOfPrices? PriceOfTicket { get; set; } 
-    public Passenger? Passengers { get; set; }
-    public WeatherForecast? Weather { get; set; }
+    public LocationPathEntity? Direction { get; set; }
+    public FlightScheduleEntity? Date { get; set; }
+    public TypeOfPricesEntity? PriceOfTicket { get; set; } 
+    public PassengerEntity? Passengers { get; set; }
+    public WeatherForecastEntity? Weather { get; set; }
 
-    public Bonus? Bonus { get; set; }
+    public BonusEntity? Bonus { get; set; }
     
     /// <summary>
     /// isGearedUp is used to determine if flight is available or not 

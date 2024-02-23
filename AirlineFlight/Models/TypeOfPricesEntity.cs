@@ -1,14 +1,18 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using System.Security;
-using static AirlineFlightl.TypeOfPrices;
+
 
 namespace AirlineFlightl;
 
-public class TypeOfPrices
+public class TypeOfPricesEntity
 {
     //the first generated origin string numbers are stored in readonly type of variables to preserve consistency of the numbers
-    private static readonly string adultPrice = TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Adult);
-    private static readonly string childPrice = TypeOfPrices.PriceOfTickets(TypeOfPrices.Category.Children);
+    private static readonly string adultPrice = TypeOfPricesEntity.PriceOfTickets(TypeOfPricesEntity.Category.Adult);
+    private static readonly string childPrice = TypeOfPricesEntity.PriceOfTickets(TypeOfPricesEntity.Category.Children);
+
+    [Key]
+    public int PriceId { get; set; }
     public string Adults { get; } = adultPrice;
     public string Children { get; } = childPrice;
     public enum Category

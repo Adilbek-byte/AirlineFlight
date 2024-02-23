@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AirlineFlight;
 
-public class WeatherForecast
+public class WeatherForecastEntity
 {
+    [Key]
+    public int WeatherId { get; set; }
+    private static readonly int temperatureC = WeatherForecastEntity.Forecast();
 
-    private static readonly int temperatureC = WeatherForecast.Forecast();
-
-    public string? Weather { get; set; } = WeatherForecast.WeatherCondition();
+    public string? Weather { get; set; } = WeatherForecastEntity.WeatherCondition();
     public  string? TemperatureC { get; set; } = $"{temperatureC} °C";
     public string TemperatureF => $"{32 + (int)(temperatureC / 0.556)} °F";
 

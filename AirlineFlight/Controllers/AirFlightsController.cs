@@ -1,9 +1,11 @@
-﻿using AirlineFlight.Helper;
+﻿using AirlineFlight.DataBase;
+using AirlineFlight.Helper;
 using AirlineFlight.Models;
 using AirlineFlight.Services;
 using AirlineFlight.Services.Interfaces;
 using AirlineFlightl;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq.Expressions;
 using System.Net.WebSockets;
@@ -18,12 +20,19 @@ namespace AirlineFlight.Controllers;
 // Наследуется от ControllerBase.
 public class AirFlightsController : ControllerBase
 {
-    
+    private readonly FlightDb _contextDb;
+    private readonly IFlightService _flightService;
     // list named planes stores all the data 
     public static List<Flight> planes = AirFlights.CreateFlights();
 
+    public AirFlightsController(FlightDb contextDb, IFlightService flightService)
+    {
+        _contextDb = contextDb;
+        _flightService = flightService;
+    }
 
-    
+
+
     /// <summary>
     /// GetFlights displays the data
     /// </summary>
@@ -33,10 +42,10 @@ public class AirFlightsController : ControllerBase
     // Использует асинхронный метод GetFlightsAsync() из сервиса _flightservice для получения данных.
 
     [HttpGet]
-    public List<Flight> GetFlights()
+    public async Task<IActionResult> GetFlights()
     {
-
-        return planes;
+        var movies = await _contextDb.Flights.OrderBy(x => x.Date).ToListAsync();
+        return Ok(movies);
     }
 
 
@@ -49,18 +58,18 @@ public class AirFlightsController : ControllerBase
     // HTTP GET метод, обрабатывающий запрос на получение списка направлений авиарейсов.
     // Использует асинхронный метод GetDirectionAsync() для получения данных.
 
-    [HttpGet("Direction", Name = "GetDirection")]
+    [HttpGet("direction", Name = "GetDirection")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
 
     public async Task<ActionResult<List<Flight>>> GetDirection()
     {
-        await Task.Delay(1000);
+      
         try
         {
-            var res = planes.Select(x => x.Direction).ToList();
-            if (res.Count == 0) throw new Exception("nothing is found");
-            return Ok(res);
+            var res = await _flightService.getDirection();
+           
+            return res.Count == 0 ? throw new Exception("nothing is found") : Ok(res);
         }
         catch (Exception ex)
         {
@@ -93,17 +102,11 @@ public class AirFlightsController : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(500, Type = typeof(string))]
 
-    public async Task<IActionResult> PostFlight(Flight flight, int id)
+    public async Task<IActionResult> PostFlight(FlightEntity flight, int id)
     {
-        await Task.Delay(1000);
         try
         {
-            var res = planes.FirstOrDefault(x => x.FlightId == id);
-            if (res != null) throw new Exception("the id you are looking for already exists");
-
-            flight.FlightId = id;
-            planes.Add(flight);
-            return CreatedAtRoute("PostNewFlight", new { id }, flight);
+            return Ok(await _flightService.PostFlight(flight, id));
         }
         catch (Exception ex)
         {
@@ -125,7 +128,7 @@ public class AirFlightsController : ControllerBase
     // Возвращает HTTP статус 200 (OK) с обновленным списком авиарейсов в ответе.
     // В случае отсутствия указанного id возвращает HTTP статус 400 и сообщение об ошибке.
 
-    [HttpGet("update", Name = "UpdateFlight")]
+    [HttpPut("update", Name = "UpdateFlight")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
     public ActionResult<List<Flight>> UpdateFlight([FromQuery] Flight flight, int id)
@@ -189,134 +192,11 @@ public class AirFlightsController : ControllerBase
 
 
 
-    /// <summary>
-    /// GetPassenger allows the user to add the quantity of Adults and children then
-    /// it'll sum up and give you totalSum 
-    /// </summary>
-    /// <param name="numOfPassenger"></param>
-    /// <param name="typeOfPassenger"></param>
-    /// <param name="direction"></param>
-    /// <returns> a list with updated data </returns>
+   
 
+    
 
-
-    // HTTP GET метод, обрабатывающий запрос на получение информации о доступных авиарейсах в зависимости от параметров пассажиров.
-    // Принимает параметры: numOfPassenger - количество пассажиров, typeOfPassenger - категория пассажиров, direction - направление.
-
-    [HttpGet("{numOfPassenger}, {typeOfPassenger}, {direction}", Name = "GetInfoPassengers")]
-    [ProducesResponseType(200, Type = typeof(List<Flight>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    public ActionResult<List<Flight>> GetPassenger(int numOfPassenger, string typeOfPassenger, string direction)
-    {
-        var res = planes.Where(t => t.Direction?.ToWhere == direction).ToList();
-        try
-        {
-            if (numOfPassenger <= 0) throw new Exception("the number of passengers should not be less or eqqual to zero! ");
-            if (res.Count == 0) throw new Exception("such a location is not found");
-            if (!Enum.TryParse<TypeOfPrices.Category>(typeOfPassenger, out var category)) throw new Exception("Invalid passenger category");
-
-            var output = InputHelper.getPassengerHelper(res, typeOfPassenger, numOfPassenger);
-            Console.WriteLine(output);
-            return Ok(res);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-
-    /// <summary>
-    /// GetPassenger takes passengers out and recalculates totalSum
-    /// </summary>
-    /// <param name="numOfPassenger"></param>
-    /// <param name="typeOfPassenger"></param>
-    /// <param name="direction"></param>
-    /// <returns>a list with updated data </returns>
-
-
-    // Метод действия обрабатывает HTTP GET запрос по маршруту "ById/{id}" и возвращает авиарейс(ы) по указанному идентификатору.
-    // Принимает уникальный идентификатор id в качестве параметра.    
-    // Ищет авиарейс(ы) с указанным идентификатором в списке planes.
-
-
-    [HttpGet("flight/{numOfPassenger}, {typeOfPassenger}, {direction}", Name = "GetOutPassengers")]
-    [ProducesResponseType(200, Type = typeof(List<Flight>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    public ActionResult<List<Flight>> GetPassengerOut(int numOfPassenger, string typeOfPassenger, string direction)
-    {
-        var res = planes.Where(t => t.Direction?.ToWhere == direction).ToList();
-        try
-        {
-            if (numOfPassenger <= 0) throw new Exception("the number of passengers should not be less or eqqual to zero! ");
-            if (res.Count == 0) throw new Exception("such a location is not found");
-            if (!Enum.TryParse<TypeOfPrices.Category>(typeOfPassenger, out var category)) throw new Exception("Invalid passenger category");
-
-            var output = InputHelper.getPassengerOutHelper(res, typeOfPassenger, numOfPassenger);
-            Console.WriteLine(output);
-            return Ok(res);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-    /// <summary>
-    /// this contoller keeps track of if anyone purchases more or equal to 7 tickets if so
-    /// it'll provide them with a free taxi
-    /// </summary>
-    /// <returns> a list with  </returns>
-
-    [HttpGet("Bonus")]
-    public async Task<IActionResult> GetBonus()
-    {
-        await Task.Delay(1000);
-        var bonus = planes.Where(x => x.Passengers!.TotalPeople >= 7).ToList();  
-        try
-        {
-            foreach (var item in bonus)
-            {
-                if (bonus.Any())
-                    item.Bonus!.FreeTaxi = true;
-                else
-                    item.Bonus!.FreeTaxi = false;
-            }
-            return Ok(bonus);
-        }
-        catch {
-            return BadRequest("there is something going wrong");
-        }
-    }
-
-    /// <summary>
-    /// GetById looks for a flight with the searched id 
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns> a flight wiht the requested id </returns>
-
-    // Метод действия обрабатывает HTTP GET запрос по маршруту "ById/{id}" и возвращает авиарейс(ы) по указанному идентификатору.
-    // Принимает уникальный идентификатор id в качестве параметра.    
-    // Ищет авиарейс(ы) с указанным идентификатором в списке planes.
-
-
-    [HttpGet("ById/{id}", Name = "GetById")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        await Task.Delay(1000);
-        try
-        {
-            var res = planes.Where(t => t.FlightId == id).ToList();
-            if (res.Count == 0) throw new Exception("the id you are looking for is not found!");
-            return Ok(res);
-        }
-
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-
-
-    }
+    
 
     /// <summary>
     /// SetUpNewFlight inspects if any flights with the requested id exist or not if not 
@@ -373,7 +253,7 @@ public class AirFlightsController : ControllerBase
     // Метод действия обрабатывает HTTP POST запрос по маршруту "delete/{flightId}" для удаления авиарейса по его идентификатору.
     // Принимает flightId в качестве параметра, представляющего уникальный идентификатор авиарейса.
 
-    [HttpPost("delete/{flightId}")]
+    [HttpDelete("delete/{flightId}")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
     public ActionResult<List<Flight>> deleteFlight(int flightId)
@@ -404,18 +284,6 @@ public class AirFlightsController : ControllerBase
 
 
 
-    // Метод действия обрабатывает HTTP GET запрос по маршруту "hotflight".
-    // Возвращает список объектов HotFlight, представляющих информацию о горячих авиабилетах.
-    // В случае успешного выполнения запроса возвращается HTTP статус 200 и список HotFlight.
-    // В случае ошибки возвращается HTTP статус 400 с соответствующим сообщением об ошибке.
-    [HttpGet("hotflight")]
-    [ProducesResponseType(200, Type = typeof(List<HotFlight>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    public ActionResult<List<HotFlight>> HotFlightMethod()
-    {
-        List<HotFlight> hotflight = HotFlight.CreateHotFlights();
-        return Ok(hotflight);
-    }
-
+   
 
 }

@@ -31,18 +31,18 @@ public class InputHelper
     {
         string res = "";
 
-        var data = new TypeOfPrices();
+        var data = new TypeOfPricesEntity();
  
         foreach (var item in flight)
         {
             switch (passenger)
             {
                 case "Adult":
-                    if(passenger == TypeOfPrices.Category.Adult.ToString())
+                    if(passenger == TypeOfPricesEntity.Category.Adult.ToString())
                         item.Passengers!.Adult += number;
                     break;
                 case "Children":
-                    if (passenger == TypeOfPrices.Category.Children.ToString())
+                    if (passenger == TypeOfPricesEntity.Category.Children.ToString())
                         item.Passengers!.Child += number;
                     break;
                 default:
@@ -75,13 +75,13 @@ public class InputHelper
     public static string getPassengerOutHelper(List<Flight> flight, string passenger, int number)
     {
         string res = "";
-        var data = new TypeOfPrices();
+        var data = new TypeOfPricesEntity();
         foreach (var item in flight)
         {
 
-            if (passenger == TypeOfPrices.Category.Adult.ToString() && item.Passengers!.Adult != 0)
+            if (passenger == TypeOfPricesEntity.Category.Adult.ToString() && item.Passengers!.Adult != 0)
                 item.Passengers!.Adult -= number;
-            else if (passenger == TypeOfPrices.Category.Children.ToString() && item.Passengers!.Child != 0)
+            else if (passenger == TypeOfPricesEntity.Category.Children.ToString() && item.Passengers!.Child != 0)
                 item.Passengers!.Child -= number;
 
             item.Passengers!.TotalPeople = item.Passengers!.Adult + item.Passengers!.Child;
