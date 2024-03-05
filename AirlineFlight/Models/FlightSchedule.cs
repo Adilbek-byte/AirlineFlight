@@ -5,19 +5,18 @@ using System.Text.Json.Serialization;
 
 namespace AirlineFlight;
 
-public class FlightScheduleEntity
+public class FlightSchedule
 {
-    //random instance to obtain from
-    public static Random random = new Random();
+  
 
-    public FlightScheduleEntity()
+    public FlightSchedule()
     {
         Departure = RandomTime(30);
-        Return = Departure.AddDays(random.Next(10, 13));
+        Return = Departure.AddDays(Random.Shared.Next(10, 13));
     }
 
-    [Key]
-    public int ScheduleId { get; set; }
+    
+    public long FlightId { get; set; }
     //this json decorator used for installing the customized date format
     [JsonConverter(typeof(CustomDateTimeConverter))]
     public DateTime Departure { get; set; }
@@ -26,7 +25,10 @@ public class FlightScheduleEntity
     [JsonConverter(typeof(CustomDateTimeConverter))]
     public DateTime Return { get; set; }
 
-    
+  
+
+
+
     /// <summary>
     /// RandomTime method consoles out days within the range of 1 day till 30
     /// </summary>
@@ -35,7 +37,7 @@ public class FlightScheduleEntity
     public static DateTime RandomTime(int daysRange)
     {
         DateTime today = DateTime.Today;
-        DateTime MonthAhead = today.AddDays(random.Next(0, daysRange));
+        DateTime MonthAhead = today.AddDays(Random.Shared.Next(0, daysRange));
         return MonthAhead;
       
         

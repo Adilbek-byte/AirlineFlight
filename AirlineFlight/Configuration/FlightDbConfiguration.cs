@@ -4,19 +4,18 @@ using System.Reflection.Emit;
 
 namespace AirlineFlight.Configuration;
 
-public class FlightDbConfiguration : IEntityTypeConfiguration<FlightEntity>
+public class FlightDbConfiguration : IEntityTypeConfiguration<Flight>
 {
-    public void Configure(EntityTypeBuilder<FlightEntity> builder)
+    public void Configure(EntityTypeBuilder<Flight> builder)
     {
         
             builder.HasOne(f => f.Direction).
-             WithMany()
-             .HasForeignKey(f => f.DirectionId);
+             WithOne()
+             .HasForeignKey<Flight>(f => f.DirectionId);
 
-    
-            builder.HasOne(f => f.Weather)
-            .WithOne()
-            .HasForeignKey<WeatherForecastEntity>(f => f.WeatherId);   
+
+            
+       
 
     }
 }

@@ -2,13 +2,14 @@
 
 namespace AirlineFlight;
 
-public class LocationPathEntity
+public class LocationPath
 {
     //Location data
-    [Key]
-    public int PathId { get; set; }
+    
+    public int Id { get; set; }
     public string? FromWhere { get; set; }
     public string? ToWhere { get; set; }
-    public Guid HotId { get; set; }
-    
+    public int HotFlightId { get; set; }
+    public List<HotFlight>? HotFlights { get; set; } = new();
+
 }

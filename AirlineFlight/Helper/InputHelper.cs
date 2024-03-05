@@ -27,22 +27,22 @@ public class InputHelper
     /// <returns>totalSum </returns>
     
 
-    public static string getPassengerHelper(List<Flight> flight, string passenger, int number)
+    public static string GetPassengerHelper(List<Flight> flight, string passenger, int number)
     {
         string res = "";
 
-        var data = new TypeOfPricesEntity();
+        var data = new TypeOfPrices();
  
         foreach (var item in flight)
         {
             switch (passenger)
             {
                 case "Adult":
-                    if(passenger == TypeOfPricesEntity.Category.Adult.ToString())
+                    if(passenger == TypeOfPrices.Category.Adult.ToString())
                         item.Passengers!.Adult += number;
                     break;
                 case "Children":
-                    if (passenger == TypeOfPricesEntity.Category.Children.ToString())
+                    if (passenger == TypeOfPrices.Category.Children.ToString())
                         item.Passengers!.Child += number;
                     break;
                 default:
@@ -51,8 +51,8 @@ public class InputHelper
 
             // this way of getting a generated random string number with symbols converted back to integer 
             item.Passengers!.TotalPeople = item.Passengers.Adult + item.Passengers.Child;
-            int adultPrice = int.Parse(string.Concat(data.Adults.Where(char.IsDigit)));
-            int childPrice = int.Parse(string.Concat(data.Children.Where(char.IsDigit)));
+            int adultPrice = int.Parse(string.Concat(data.Adults!.Where(char.IsDigit)));
+            int childPrice = int.Parse(string.Concat(data.Children!.Where(char.IsDigit)));
             item.Passengers.TotalSum = (CalculateTotalFee(item.Passengers!.Adult, adultPrice) +
                                         CalculateTotalFee(item.Passengers!.Child, childPrice)).ToString() + " $";
 
@@ -72,23 +72,23 @@ public class InputHelper
     /// <param name="number"></param>
     /// <returns> totalSum </returns>
 
-    public static string getPassengerOutHelper(List<Flight> flight, string passenger, int number)
+    public static string GetPassengerOutHelper(List<Flight> flight, string passenger, int number)
     {
         string res = "";
-        var data = new TypeOfPricesEntity();
+        var data = new TypeOfPrices();
         foreach (var item in flight)
         {
 
-            if (passenger == TypeOfPricesEntity.Category.Adult.ToString() && item.Passengers!.Adult != 0)
+            if (passenger == TypeOfPrices.Category.Adult.ToString() && item.Passengers!.Adult != 0)
                 item.Passengers!.Adult -= number;
-            else if (passenger == TypeOfPricesEntity.Category.Children.ToString() && item.Passengers!.Child != 0)
+            else if (passenger == TypeOfPrices.Category.Children.ToString() && item.Passengers!.Child != 0)
                 item.Passengers!.Child -= number;
 
             item.Passengers!.TotalPeople = item.Passengers!.Adult + item.Passengers!.Child;
 
             // this way of getting a generated random string number with symbols converted back to integer 
-            int adultPrice = int.Parse(string.Concat(data.Adults.Where(char.IsDigit)));
-            int childPrice = int.Parse(string.Concat(data.Children.Where(char.IsDigit)));
+            int adultPrice = int.Parse(string.Concat(data.Adults!.Where(char.IsDigit)));
+            int childPrice = int.Parse(string.Concat(data.Children!.Where(char.IsDigit)));
             item.Passengers.TotalSum = (CalculateTotalFee(item.Passengers!.Adult, adultPrice) +
                                         CalculateTotalFee(item.Passengers!.Child, childPrice)).ToString() + " $";
 

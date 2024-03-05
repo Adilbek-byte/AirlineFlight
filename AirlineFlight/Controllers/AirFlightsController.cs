@@ -1,29 +1,20 @@
 ﻿using AirlineFlight.DataBase;
-using AirlineFlight.Helper;
-using AirlineFlight.Models;
-using AirlineFlight.Services;
 using AirlineFlight.Services.Interfaces;
-using AirlineFlightl;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq.Expressions;
-using System.Net.WebSockets;
 
 namespace AirlineFlight.Controllers;
-// Атрибут [ApiController] указывает, что этот класс является контроллером API и включает в себя дополнительные функциональные возможности.
-// Атрибут [Route("flights")] определяет базовый маршрут для всех действий в контроллере, в данном случае - "flights".
+
 [ApiController]
 [Route("flights")]
 
-// Класс AirFlightsController представляет контроллер для обработки HTTP запросов, связанных с авиарейсами.
-// Наследуется от ControllerBase.
+
 public class AirFlightsController : ControllerBase
 {
     private readonly FlightDb _contextDb;
     private readonly IFlightService _flightService;
-    // list named planes stores all the data 
-    public static List<Flight> planes = AirFlights.CreateFlights();
+    
+   
 
     public AirFlightsController(FlightDb contextDb, IFlightService flightService)
     {
@@ -33,13 +24,7 @@ public class AirFlightsController : ControllerBase
 
 
 
-    /// <summary>
-    /// GetFlights displays the data
-    /// </summary>
-    /// <returns>the data on browser in the form of Json format</returns>
-
-    // HTTP GET метод, обрабатывающий запрос на получение списка авиарейсов.
-    // Использует асинхронный метод GetFlightsAsync() из сервиса _flightservice для получения данных.
+  
 
     [HttpGet]
     public async Task<IActionResult> GetFlights()
@@ -55,8 +40,7 @@ public class AirFlightsController : ControllerBase
     /// <returns>list of directions </returns>
     /// 
 
-    // HTTP GET метод, обрабатывающий запрос на получение списка направлений авиарейсов.
-    // Использует асинхронный метод GetDirectionAsync() для получения данных.
+    
 
     [HttpGet("direction", Name = "GetDirection")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
@@ -89,12 +73,7 @@ public class AirFlightsController : ControllerBase
 
 
 
-    // HTTP POST метод, обрабатывающий запрос на добавление нового авиарейса.
-    // Принимает объект Flight и уникальный идентификатор id в качестве параметров.
-    // Использует асинхронный метод PostFlightAsync() для выполнения операции.
-    // Возвращает HTTP статус 200 (OK) с обновленным списком авиарейсов в ответе.
-    // В случае уже существующего id возвращает HTTP статус 400 с сообщением об ошибке.
-    // В случае других ошибок возвращает HTTP статус 500 с сообщением об ошибке.
+    
 
 
     [HttpPost(Name = "PostNewFlight")]
@@ -102,7 +81,7 @@ public class AirFlightsController : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(500, Type = typeof(string))]
 
-    public async Task<IActionResult> PostFlight(FlightEntity flight, int id)
+    public async Task<IActionResult> PostFlight(Flight flight, int id)
     {
         try
         {
@@ -123,28 +102,18 @@ public class AirFlightsController : ControllerBase
     /// <param name="id"></param>
     /// <returns>a updated list </returns>
 
-    // HTTP GET метод, обрабатывающий запрос на обновление информации об авиарейсе по идентификатору.
-    // Принимает параметры: объект Flight с обновленной информацией и уникальный идентификатор id.
-    // Возвращает HTTP статус 200 (OK) с обновленным списком авиарейсов в ответе.
-    // В случае отсутствия указанного id возвращает HTTP статус 400 и сообщение об ошибке.
+   
 
     [HttpPut("update", Name = "UpdateFlight")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    public ActionResult<List<Flight>> UpdateFlight([FromQuery] Flight flight, int id)
+    public async Task<ActionResult<List<Flight>>> UpdateFlights(string aviaName, int Id, int passId, string type)
     {
         try
         {
-            var res = planes.FirstOrDefault(x => x.FlightId == id);
-            if (res == null) throw new Exception("the id has not been found");
+            var res = await _flightService.UpdateFlight(aviaName, Id, passId, type);
 
-            res.Direction = flight.Direction;
-            res.Type = flight.Type;
-            res.AviaName = flight.AviaName;
-            res.PriceOfTicket = flight.PriceOfTicket;
-            res.FlightId = flight.FlightId;
-
-            return CreatedAtRoute("UpdateFlight", new { id }, flight);
+            return Ok();
         }
         catch (Exception ex)
         {
@@ -168,20 +137,11 @@ public class AirFlightsController : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     public async Task<ActionResult<List<Flight>>> GetNumberOfFlights(int numberOfFlights)
     {
-        await Task.Delay(1000);
-        List<Flight> result = new List<Flight>();
         try
         {
-            if (numberOfFlights < 0)
-                throw new Exception("The entered number should not be less than 0");
-            else if (numberOfFlights > planes.Count) throw new Exception(" number out of scope");
-
-            for (int i = 0; i < numberOfFlights && i < planes.Count; i++)
-            {
-                var flight = planes[i];
-                result.Add(flight);
-            }
-            return Ok(result);
+            if (numberOfFlights == 0) throw new Exception(" number of Flights mustn't be equal to 0");
+            var res = await _flightService.GetNumberOfFlights(numberOfFlights) ?? throw new Exception("nothing is found");
+            return Ok(res);
         }
         catch (Exception ex)
         {
@@ -198,46 +158,9 @@ public class AirFlightsController : ControllerBase
 
     
 
-    /// <summary>
-    /// SetUpNewFlight inspects if any flights with the requested id exist or not if not 
-    /// it creates a new one with the id 
-    /// </summary>
-    /// <param name="flight"></param>
-    /// <param name="id"></param>
-    /// <returns></returns>
-   
 
 
-
-    // Метод действия обрабатывает HTTP POST запрос по маршруту "{id}" и создает новый авиарейс с указанным идентификатором.
-    // Принимает объект Flight и уникальный идентификатор id в качестве параметров.
-    // После задержки в 1000 миллисекунд для имитации асинхронной операции выполняет следующие действия:
-    // Проверяет, существует ли уже авиарейс с указанным идентификатором в списке planes.
-    // Если авиарейс с таким id уже существует, выбрасывается исключение с сообщением "flight with the provided id already exists".
-
-
-
-    [HttpPost("{id}", Name = "CreateFlightById")]
-    [ProducesResponseType(200, Type = typeof(List<Flight>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    public async Task<IActionResult> SetUpNewFlight(Flight flight, int id)
-    {
-        await Task.Delay(1000);
-        try
-        {
-
-            if (planes.Any(x => x.FlightId == id)) throw new Exception("flight with the provided id already exists");
-            flight.FlightId = id;
-            planes.Add(flight);
-            return CreatedAtRoute("CreateFlightById", new { id }, flight);
-        }
-
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
+    
 
 
     /// <summary>
@@ -256,13 +179,12 @@ public class AirFlightsController : ControllerBase
     [HttpDelete("delete/{flightId}")]
     [ProducesResponseType(200, Type = typeof(List<Flight>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    public ActionResult<List<Flight>> deleteFlight(int flightId)
+    public ActionResult<List<Flight>> DeleteFlight(int flightId)
     {
         try
         {
-            var res = planes.FirstOrDefault(x => x.FlightId == flightId);
-            var al = res == null ? throw new Exception("id not found") : planes.Remove(res);
-            Console.WriteLine(al);
+            var res = _flightService.DeleteFlight(flightId);
+            Console.WriteLine(res);
             return Ok($" flight with the {flightId} has been deleted");
         }
         catch (Exception ex)

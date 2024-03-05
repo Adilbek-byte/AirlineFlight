@@ -20,7 +20,7 @@ builder.Services.AddDbContext<FlightDb>(
     {
         options.UseSqlServer(connectionString);
     });
-builder.Services.AddSingleton<IFlightService, FlightService>();
+builder.Services.AddScoped<IFlightService, FlightService>();
 
 
 

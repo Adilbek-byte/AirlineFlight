@@ -21,9 +21,9 @@ public class HotFlightController: ControllerBase
     // В случае успешного выполнения запроса возвращается HTTP статус 200 и список HotFlight.
     // В случае ошибки возвращается HTTP статус 400 с соответствующим сообщением об ошибке.
     [HttpGet("hotflight")]
-    [ProducesResponseType(200, Type = typeof(List<HotFlightEntity>))]
+    [ProducesResponseType(200, Type = typeof(List<HotFlight>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    public async Task<ActionResult<List<HotFlightEntity>>> HotFlightMethod()
+    public async Task<ActionResult<List<HotFlight>>> HotFlightMethod()
     {
         var flights = await _contextDb.HotFlights.ToListAsync();
         return Ok(flights);

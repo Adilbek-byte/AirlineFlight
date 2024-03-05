@@ -1,40 +1,42 @@
 ﻿using AirlineFlight.Configuration;
-using AirlineFlight.Models;
 using AirlineFlightl;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 
 namespace AirlineFlight.DataBase;
 
-public class FlightDb: DbContext    
-{ 
-    public FlightDb(DbContextOptions<FlightDb> options ) : base(options)
-    {   
+public class FlightDb : DbContext
+{
+    public FlightDb(DbContextOptions<FlightDb> options) : base(options)
+    {
 
     }
 
-    public DbSet<FlightEntity> Flights => Set<FlightEntity>();
+    public DbSet<Flight> Flights => Set<Flight>();
     
-    public DbSet<HotFlightEntity> HotFlights => Set<HotFlightEntity>();
-    public DbSet<PassengerEntity> Passengers => Set<PassengerEntity>();
-    public DbSet<LocationPathEntity> LocationPaths { get; } = null!;
-    public DbSet<FlightScheduleEntity> FlightSchedules => Set<FlightScheduleEntity>();
-    public DbSet<TypeOfPricesEntity> TypeOfPrices { get; } = null!;
+    public DbSet<HotFlight> HotFlights => Set<HotFlight>();
+    public DbSet<Passenger> Passengers => Set<Passenger>();
+    public DbSet<LocationPath> LocationPaths { get; } = null!;
+    public DbSet<FlightSchedule> FlightSchedules => Set<FlightSchedule>();
+    public DbSet<TypeOfPrices> TypeOfPrices { get; } = null!;
 
 
-   
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
         modelBuilder.ApplyConfiguration(new FlightDbConfiguration());
         modelBuilder.ApplyConfiguration(new HotFlightDbConfiguration());
         modelBuilder.ApplyConfiguration(new PassengerDbConfiguration());
+        modelBuilder.ApplyConfiguration(new TicketsDbConfiguration());
 
+        modelBuilder.Entity<FlightSchedule>().HasKey(x => x.FlightId);
+        modelBuilder.Entity<TypeOfPrices>().HasKey(x => x.PassengerId);
+
+        modelBuilder.Entity<Flight>()
+            .HasOne(x => x.TypeOfPrices)
+            .WithMany(x => x.Flights)
+            .HasForeignKey(x => x.TypeOfPricesId)
+            .OnDelete(DeleteBehavior.NoAction);
 
     }
-
-
 }

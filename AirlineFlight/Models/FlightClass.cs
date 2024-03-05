@@ -1,10 +1,16 @@
-﻿using System.Runtime.ExceptionServices;
+﻿using AirlineFlightl;
+using System.Runtime.ExceptionServices;
 
 namespace AirlineFlight;
 
 public class FlightClass
 {
-    public static Random random = new Random();
+
+    public int Id { get; set; }
+
+    public int TypeOfPricesId { get; set; }
+    public TypeOfPrices? TypeOfPrices { get; set; }
+    public string? PlaneClass => FlightClass.SetRandomClass();
 
     // AirClass enum stores data 
     public enum AirClass
@@ -20,7 +26,7 @@ public class FlightClass
     /// <returns> random generated string data out of AirClass enum </returns>
     public static string SetRandomClass()
     {
-       int rndIndex = random.Next(Enum.GetValues(typeof(AirClass)).Length);
+       int rndIndex = Random.Shared.Next(Enum.GetValues(typeof(AirClass)).Length);
        AirClass rndFlightClass = (AirClass)Enum.GetValues(typeof(AirClass)).GetValue(rndIndex)!;
         return rndFlightClass.ToString();   
     }

@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AirlineFlight.Configuration;
 
-public class PassengerDbConfiguration : IEntityTypeConfiguration<PassengerEntity>
+public class PassengerDbConfiguration : IEntityTypeConfiguration<Passenger>
 {
-    public void Configure(EntityTypeBuilder<PassengerEntity> builder)
+    public void Configure(EntityTypeBuilder<Passenger> builder)
     {
         builder.ToTable("Passengers");
-        builder.HasKey(x => x.PassengerId);
-        builder.HasMany(p => p.FlightsList)
-              .WithOne(f => f.Passengers)
-              .HasForeignKey(p => p.FlightId)
-              .OnDelete(DeleteBehavior.Cascade);
+        builder.HasKey(x => x.Id);
+        builder.HasMany(x => x.Flights)
+              .WithOne(x => x.Passengers);
+         
+            
 
     }
 }

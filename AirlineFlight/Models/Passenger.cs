@@ -7,19 +7,22 @@ using System.Transactions;
 
 namespace AirlineFlight;
 
-public class PassengerEntity
+public class Passenger
 {
     //Passenger data 
 
-    [Key]
-    public int PassengerId { get; set; }
+    
+    public int Id { get; set; }
     public int Adult { get; set; } = 0;
     public int Child { get; set; } = 0;
     public int TotalPeople { get; set; } = 0;
     public string? TotalSum { get; set; } = null;
-    public Guid FlightId { get; set; }
-    public FlightEntity? Flights { get; set; }
-    public List<FlightEntity>? FlightsList { get; set; }
+    public bool FreeTaxi { get; set; }
+    public int FlightId { get; set; }
+    
+    public TypeOfPrices? Tickets { get; set; }
+    public List<Flight>? Flights { get; set; } = new();
+    
 
    
 
